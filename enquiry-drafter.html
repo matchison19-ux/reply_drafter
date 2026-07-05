@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enquiry Drafter — Mike Atchison Photography</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Libre+Franklin:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600&family=Cousine:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:   #423c33;
+  --sage:  #8d9386;
+  --sand:  #d0c7b4;
+  --shell: #eae8e1;
+  --mist:  #f0efea;
+  --cream: #f5f3ed;
+  --serif:   'Instrument Serif', Georgia, serif;
+  --heading: 'Libre Franklin', system-ui, sans-serif;
+  --sans:    'Inter', system-ui, sans-serif;
+  --mono:    'Cousine', monospace;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 16px; }
+body {
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+
+/* ── HEADER ─────────────────────────────────────── */
+.site-header {
+  border-bottom: 1px solid var(--sand);
+  padding: 28px 40px;
+  display: flex;
+  align-items: baseline;
+  gap: 20px;
+}
+.site-header h1 {
+  font-family: var(--serif);
+  font-style: italic;
+  font-size: 1.75rem;
+  color: var(--ink);
+  line-height: 1;
+}
+.site-header .sub {
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+
+/* ── API KEY SETUP ──────────────────────────────── */
+#key-setup {
+  background: var(--shell);
+  border-bottom: 1px solid var(--sand);
+  padding: 14px 40px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+#key-setup label {
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sage);
+  white-space: nowrap;
+}
+#key-setup input {
+  flex: 1;
+  max-width: 380px;
+  border: none;
+  border-bottom: 1.5px solid var(--sand);
+  background: transparent;
+  padding: 6px 2px;
+  font-family: var(--mono);
+  font-size: 0.8125rem;
+  color: var(--ink);
+  outline: none;
+  transition: border-color 0.18s;
+}
+#key-setup input:focus { border-bottom-color: var(--sage); }
+#key-setup input::placeholder { color: var(--sand); }
+.key-save-btn {
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  padding: 7px 16px;
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.15s;
+}
+.key-save-btn:hover { background: #2c2820; }
+#key-status {
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--sage);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#key-status .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage); }
+#key-status a {
+  color: var(--sand);
+  text-decoration: none;
+  cursor: pointer;
+  transition: color 0.15s;
+}
+#key-status a:hover { color: var(--sage); }
+.hidden { display: none !important; }
+
+/* ── MAIN LAYOUT ────────────────────────────────── */
+.main {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  min-height: calc(100vh - 130px);
+}
+
+/* ── LEFT: INPUT ────────────────────────────────── */
+.input-pane {
+  border-right: 1px solid var(--sand);
+  display: flex;
+  flex-direction: column;
+  padding: 36px 40px;
+  gap: 20px;
+}
+.pane-label {
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.pane-label::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--sand);
+}
+#enquiry {
+  flex: 1;
+  min-height: 320px;
+  border: none;
+  border-bottom: 1.5px solid var(--sand);
+  background: transparent;
+  padding: 10px 2px;
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink);
+  line-height: 1.7;
+  outline: none;
+  resize: none;
+  transition: border-color 0.18s;
+}
+#enquiry:focus { border-bottom-color: var(--sage); }
+#enquiry::placeholder { color: var(--sand); font-weight: 300; }
+
+.generate-btn {
+  background: var(--ink);
+  color: var(--cream);
+  border: none;
+  padding: 16px 28px;
+  font-family: var(--heading);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: background 0.18s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+}
+.generate-btn:hover:not(:disabled) { background: #2c2820; }
+.generate-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ── RIGHT: OUTPUT ──────────────────────────────── */
+.output-pane {
+  display: flex;
+  flex-direction: column;
+  padding: 36px 40px;
+  gap: 20px;
+  background: var(--mist);
+}
+
+/* Empty state */
+#empty-state {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  opacity: 0.5;
+}
+.empty-icon {
+  width: 48px;
+  height: 48px;
+  opacity: 0.4;
+}
+#empty-state p {
+  font-family: var(--heading);
+  font-size: 0.6875rem;
+  font-weight: 400;
+  color: var(--sage);
+  text-align: center;
+  letter-spacing: 0.04em;
+  line-height: 1.6;
+}
+
+/* Loading */
+#loading-state {
+  flex: 1;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+}
+.loading-label {
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.dot-pulse {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+  animation: pulse 1.2s ease-in-out infinite;
+}
+.dot-pulse:nth-child(2) { animation-delay: 0.2s; }
+.dot-pulse:nth-child(3) { animation-delay: 0.4s; }
+@keyframes pulse {
+  0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+  40% { transform: scale(1); opacity: 1; }
+}
+
+/* Result */
+#result-state {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  flex: 1;
+}
+
+/* Signals card */
+.signals-card {
+  background: var(--shell);
+  border-radius: 2px;
+  padding: 16px 18px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.signal-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.signal-key {
+  font-family: var(--heading);
+  font-size: 0.4375rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.signal-val {
+  font-family: var(--sans);
+  font-size: 0.75rem;
+  color: var(--ink);
+  font-weight: 500;
+}
+.signal-divider {
+  width: 1px;
+  background: var(--sand);
+  align-self: stretch;
+  margin: 2px 0;
+}
+
+/* Package tag */
+.package-tag {
+  margin-left: auto;
+  background: var(--ink);
+  color: var(--cream);
+  padding: 6px 12px;
+  border-radius: 2px;
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  align-self: center;
+  white-space: nowrap;
+}
+
+/* Reply card */
+.reply-card {
+  background: white;
+  border-radius: 2px;
+  border: 1px solid var(--sand);
+  padding: 28px 32px;
+  flex: 1;
+  position: relative;
+}
+.reply-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--shell);
+}
+.reply-from {
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--sage);
+}
+.copy-btn {
+  background: transparent;
+  border: 1.5px solid var(--sand);
+  color: var(--sage);
+  padding: 6px 14px;
+  border-radius: 2px;
+  font-family: var(--heading);
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.copy-btn:hover { border-color: var(--sage); color: var(--ink); }
+.copy-btn.copied { border-color: var(--sage); color: var(--sage); }
+
+#reply-text {
+  font-family: var(--sans);
+  font-size: 0.9rem;
+  color: var(--ink);
+  line-height: 1.8;
+  white-space: pre-wrap;
+}
+
+/* Regenerate row */
+.regen-row {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+.regen-btn {
+  background: transparent;
+  border: 1.5px solid var(--sand);
+  color: var(--sage);
+  padding: 8px 18px;
+  border-radius: 2px;
+  font-family: var(--heading);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.regen-btn:hover { border-color: var(--sage); color: var(--ink); }
+
+/* Error */
+#error-msg {
+  display: none;
+  background: #fdf0ef;
+  border: 1px solid #e8b4b0;
+  border-radius: 2px;
+  padding: 14px 18px;
+  font-size: 0.8125rem;
+  color: #8b3a35;
+  line-height: 1.5;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────── */
+@media (max-width: 800px) {
+  .site-header { padding: 24px 24px; }
+  #key-setup { padding: 14px 24px; flex-wrap: wrap; }
+  .main { grid-template-columns: 1fr; }
+  .input-pane { border-right: none; border-bottom: 1px solid var(--sand); padding: 28px 24px; }
+  .output-pane { padding: 28px 24px; min-height: 400px; }
+  .reply-card { padding: 20px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header class="site-header">
+  <h1>Enquiry Drafter</h1>
+  <span class="sub">Mike Atchison Photography</span>
+</header>
+
+<!-- API KEY SETUP -->
+<div id="key-setup">
+  <label for="api-key-input">Anthropic API Key</label>
+  <input type="password" id="api-key-input" placeholder="sk-ant-...">
+  <button class="key-save-btn" onclick="saveKey()">Save Key</button>
+</div>
+<div id="key-status" class="hidden" style="background:var(--shell);border-bottom:1px solid var(--sand);padding:14px 40px;">
+  <span class="dot"></span>
+  API key set &nbsp;·&nbsp; <a onclick="resetKey()">change</a>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LEFT: ENQUIRY INPUT -->
+  <div class="input-pane">
+    <p class="pane-label">Their Enquiry</p>
+    <textarea id="enquiry" placeholder="Paste their enquiry email here — names, date, venue, anything they've written. The messier and more casual the better."></textarea>
+    <div id="error-msg"></div>
+    <div style="display:flex;gap:10px;">
+      <button class="generate-btn" id="gen-btn" onclick="generate()" style="flex:1;">
+        <span id="btn-text">Draft Reply</span>
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 7h10M8 3l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="regen-btn" onclick="clearAll()" style="padding:16px 20px;">Clear</button>
+    </div>
+  </div>
+
+  <!-- RIGHT: OUTPUT -->
+  <div class="output-pane">
+    <p class="pane-label">Your Reply</p>
+
+    <!-- Empty state -->
+    <div id="empty-state">
+      <svg class="empty-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="10" width="36" height="28" rx="2" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M6 16l18 12 18-12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <p>Paste an enquiry on the left<br>and hit Draft Reply</p>
+    </div>
+
+    <!-- Loading -->
+    <div id="loading-state">
+      <div class="dots">
+        <div class="dot-pulse"></div>
+        <div class="dot-pulse"></div>
+        <div class="dot-pulse"></div>
+      </div>
+      <p class="loading-label">Reading the signals...</p>
+    </div>
+
+    <!-- Result -->
+    <div id="result-state">
+      <div class="signals-card" id="signals-card"></div>
+      <div class="reply-card">
+        <div class="reply-card-header">
+          <span class="reply-from">From: Mike Atchison</span>
+          <button class="copy-btn" id="copy-btn" onclick="copyReply()">Copy Reply</button>
+        </div>
+        <div id="reply-text"></div>
+      </div>
+      <div class="regen-row">
+        <button class="regen-btn" onclick="generate()">↺ Try Again</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* ── SYSTEM PROMPT ─────────────────────────────────────────── */
+const SYSTEM_PROMPT = `You draft enquiry replies for Mike Atchison, a wedding photographer based in Geelong, Victoria, Australia (mikeatchison.com.au). He went full-time in 2025 and his primary niche is weddings.
+
+MIKE'S VOICE:
+- Warm and genuine, like a mate having a coffee — not a sales pitch
+- Australian English (colour, favourite, honour, recognise, organise)
+- NEVER use em dashes (—) under any circumstances. Not once. Replace every em dash with a comma, full stop, or rewrite the sentence entirely. This is a hard rule.
+- Never use: "reach out", "touch base", "connect", "I'd love to", "going forward", "circle back", "I wanted to reach out", "feel free to", "don't hesitate"
+- First names only from the start
+- Reference something specific from their email — the venue, the date, something personal they mentioned
+- Short, easy paragraphs. Reads naturally out loud.
+- Match their energy: if they're casual and excited, be warm. If they're measured, be professional but still human.
+- Not salesy. Just helpful.
+
+MIKE'S PACKAGES:
+- The Short Story: $2,500 / 4 hours — suits elopements, intimate ceremonies, small gatherings
+- The Wedding Story: $3,900 / 8 hours — covers prep + ceremony + portraits + start of reception. Most popular.
+- The Full Story: $4,400 / 10 hours — full day from getting ready through the reception
+
+HOW TO CHOOSE A PACKAGE:
+- "Just the ceremony", "elopement", "small", "intimate" → Short Story
+- Mentions prep OR reception but not both, typical guest count → Wedding Story
+- Mentions both prep AND full reception, or big day (100+ guests), or "full day" → Full Story
+
+- Genuinely unclear → default to Wedding Story as a natural starting point
+
+BOOKING AND PAYMENT — include a brief, natural mention of this in every reply. Keep it light and reassuring, not like a terms and conditions list:
+- $750 deposit to lock in the date
+- Two progress payments leading up to the wedding — nothing due all at once
+- Simple, straightforward contract — no surprises
+Frame this as reassuring and easy, not transactional. Something like "To lock things in it's just a $750 deposit, then two progress payments leading up to the wedding — and a simple contract to keep everything clear." Work it in naturally after the package mention, before the call to action.
+
+REPLY STRUCTURE:
+1. Warm, specific opening — use their name/s, reference their venue or date or something personal
+2. One sentence of genuine warmth — not overdone ("sounds like it's going to be a great day" not "I AM OBSESSED WITH YOUR STORY")
+3. Suggest coverage + name the package naturally: "something like The Wedding Story at $3,900 would likely suit you well"
+4. Push for a phone call — include this Calendly link: https://calendly.com/mikeatchisonphoto/quick-phone-call. Frame it as the easy next step. Then on a new line, make it clear that if they already know which coverage suits them, they can just reply saying which package they want and Mike will send the booking link straight over — totally normal, no call needed. Keep this second option casual and brief.
+5. End with a warm closing line before the sign-off, something like "Looking forward to hearing from you" or a natural variation of it. Then sign off as: Mike
+
+LENGTH: 160-220 words. Flowing prose only — no bullet points, no lists.
+
+OUTPUT:
+Return ONLY a valid JSON object with exactly these two keys — no markdown, no code fences, nothing else:
+
+{
+  "reply": "the complete email text here",
+  "signals": {
+    "names": "detected couple names or empty string",
+    "date": "detected date or empty string",
+    "venue": "detected venue or empty string",
+    "vibe": "1-3 word style description or empty string",
+    "package": "suggested package name and price"
+  }
+}`;
+
+/* ── API KEY ───────────────────────────────────── */
+function saveKey() {
+  const key = document.getElementById('api-key-input').value.trim();
+  if (!key.startsWith('sk-ant-')) {
+    alert('That doesn\'t look like an Anthropic API key — should start with sk-ant-');
+    return;
+  }
+  localStorage.setItem('map-api-key', key);
+  showKeyStatus();
+}
+
+function resetKey() {
+  localStorage.removeItem('map-api-key');
+  document.getElementById('key-status').classList.add('hidden');
+  document.getElementById('key-setup').classList.remove('hidden');
+  document.getElementById('api-key-input').value = '';
+}
+
+function showKeyStatus() {
+  document.getElementById('key-setup').classList.add('hidden');
+  document.getElementById('key-status').classList.remove('hidden');
+}
+
+function getKey() {
+  return localStorage.getItem('map-api-key') || '';
+}
+
+/* ── STATE ─────────────────────────────────────── */
+function setState(state) {
+  document.getElementById('empty-state').style.display   = state === 'empty'   ? 'flex' : 'none';
+  document.getElementById('loading-state').style.display = state === 'loading' ? 'flex' : 'none';
+  document.getElementById('result-state').style.display  = state === 'result'  ? 'flex' : 'none';
+  document.getElementById('error-msg').style.display     = state === 'error'   ? 'block' : 'none';
+
+  const btn = document.getElementById('gen-btn');
+  const txt = document.getElementById('btn-text');
+  btn.disabled = state === 'loading';
+  txt.textContent = state === 'loading' ? 'Drafting...' : 'Draft Reply';
+}
+
+/* ── GENERATE ──────────────────────────────────── */
+async function generate() {
+  const key = getKey();
+  if (!key) {
+    alert('Add your Anthropic API key at the top first.');
+    return;
+  }
+
+  const enquiry = document.getElementById('enquiry').value.trim();
+  if (!enquiry) {
+    document.getElementById('enquiry').focus();
+    return;
+  }
+
+  setState('loading');
+
+  try {
+    const res = await fetch('https://api.anthropic.com/v1/messages', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-key': key,
+        'anthropic-version': '2023-06-01',
+        'anthropic-dangerous-direct-browser-access': 'true',
+      },
+      body: JSON.stringify({
+        model: 'claude-sonnet-4-6',
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
+        messages: [{ role: 'user', content: `Here is the wedding enquiry:\n\n${enquiry}` }],
+      }),
+    });
+
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.error?.message || `API error ${res.status}`);
+    }
+
+    const data = await res.json();
+    const raw = data.content?.[0]?.text || '';
+
+    let parsed;
+    try {
+      // Strip any accidental markdown fences
+      const clean = raw.replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/i, '').trim();
+      parsed = JSON.parse(clean);
+    } catch(e) {
+      throw new Error('The reply came back in an unexpected format. Try again.');
+    }
+
+    // Hard strip any em dashes that slipped through
+    if (parsed.reply) {
+      parsed.reply = parsed.reply.replace(/\s*—\s*/g, ', ').replace(/,,/g, ',');
+    }
+
+    renderResult(parsed);
+    setState('result');
+
+  } catch(err) {
+    setState('error');
+    document.getElementById('error-msg').style.display = 'block';
+    document.getElementById('error-msg').textContent = `Something went wrong: ${err.message}`;
+  }
+}
+
+/* ── RENDER RESULT ─────────────────────────────── */
+function renderResult({ reply, signals }) {
+  // Reply text
+  document.getElementById('reply-text').textContent = reply || '';
+
+  // Signals card
+  const card = document.getElementById('signals-card');
+  card.innerHTML = '';
+
+  const items = [
+    { key: 'Names',   val: signals?.names   },
+    { key: 'Date',    val: signals?.date    },
+    { key: 'Venue',   val: signals?.venue   },
+    { key: 'Vibe',    val: signals?.vibe    },
+  ].filter(i => i.val);
+
+  items.forEach((item, idx) => {
+    const pill = document.createElement('div');
+    pill.className = 'signal-pill';
+    pill.innerHTML = `<span class="signal-key">${item.key}</span><span class="signal-val">${esc(item.val)}</span>`;
+    card.appendChild(pill);
+
+    if (idx < items.length - 1) {
+      const div = document.createElement('div');
+      div.className = 'signal-divider';
+      card.appendChild(div);
+    }
+  });
+
+  if (signals?.package) {
+    const tag = document.createElement('div');
+    tag.className = 'package-tag';
+    tag.textContent = signals.package;
+    card.appendChild(tag);
+  }
+
+  // Reset copy button
+  const copyBtn = document.getElementById('copy-btn');
+  copyBtn.textContent = 'Copy Reply';
+  copyBtn.classList.remove('copied');
+}
+
+/* ── CLEAR ─────────────────────────────────────── */
+function clearAll() {
+  document.getElementById('enquiry').value = '';
+  document.getElementById('enquiry').focus();
+  setState('empty');
+}
+
+/* ── COPY ──────────────────────────────────────── */
+function copyReply() {
+  const text = document.getElementById('reply-text').textContent;
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.getElementById('copy-btn');
+    btn.textContent = 'Copied ✓';
+    btn.classList.add('copied');
+    setTimeout(() => {
+      btn.textContent = 'Copy Reply';
+      btn.classList.remove('copied');
+    }, 2500);
+  });
+}
+
+/* ── UTILS ─────────────────────────────────────── */
+function esc(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* ── INIT ──────────────────────────────────────── */
+(function init() {
+  if (getKey()) showKeyStatus();
+  setState('empty');
+
+  // Generate on Cmd/Ctrl+Enter
+  document.getElementById('enquiry').addEventListener('keydown', e => {
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') generate();
+  });
+})();
+</script>
+</body>
+</html>
